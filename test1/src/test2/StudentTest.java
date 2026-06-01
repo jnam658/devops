@@ -54,10 +54,12 @@ class StudentTest {
 		assertTrue(std.hasStudent("홍길동"));
 	}
 	
+	//실패한 케이
 	@Test
 	@Order(6)
 	void testFailCase() {
 		assertTrue(std.hasStudent("가나다"));
 	}
+	
 
 }
