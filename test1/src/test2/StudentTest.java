@@ -47,6 +47,17 @@ class StudentTest {
 			);
 	}
 	
+	@Test
+	@Order(5)
+	void testAddDeletedStudent() {
+		std.addStudent("홍길동");
+		assertTrue(std.hasStudent("홍길동"));
+	}
 	
+	@Test
+	@Order(6)
+	void testFailCase() {
+		assertTrue(std.hasStudent("가나다"));
+	}
 
 }
