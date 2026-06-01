@@ -11,40 +11,46 @@ pipeline {
     stages {
         stage('Prepare') {
             steps {
-                sh '''
-                    mkdir -p ${CLASS_DIR}
-                    mkdir -p ${REPORT_DIR}
-                    mkdir -p lib
-                    curl -L -o ${JUNIT_JAR_PATH} ${JUNIT_JAR_URL}
-                '''
+                dir('test1') {
+                    sh '''
+                        mkdir -p ${CLASS_DIR}
+                        mkdir -p ${REPORT_DIR}
+                        mkdir -p lib
+                        curl -L -o ${JUNIT_JAR_PATH} ${JUNIT_JAR_URL}
+                    '''
+                }
             }
         }
 
         stage('Build') {
             steps {
-                sh '''
-                    find src -name "*.java" > sources.txt
-                    javac -encoding UTF-8 -d ${CLASS_DIR} -cp ${JUNIT_JAR_PATH} @sources.txt
-                '''
+                dir('test1') {
+                    sh '''
+                        find src -name "*.java" > sources.txt
+                        javac -encoding UTF-8 -d ${CLASS_DIR} -cp ${JUNIT_JAR_PATH} @sources.txt
+                    '''
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh '''
-                    java -jar ${JUNIT_JAR_PATH} \
-                         --class-path ${CLASS_DIR} \
-                         --scan-class-path \
-                         --details=tree \
-                         --reports-dir ${REPORT_DIR}
-                '''
+                dir('test1') {
+                    sh '''
+                        java -jar ${JUNIT_JAR_PATH} \
+                             --class-path ${CLASS_DIR} \
+                             --scan-class-path \
+                             --details=tree \
+                             --reports-dir ${REPORT_DIR}
+                    '''
+                }
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: "${REPORT_DIR}/**/*", allowEmptyArchive: true
+            archiveArtifacts artifacts: "test1/${REPORT_DIR}/**/*", allowEmptyArchive: true
         }
     }
 }
