@@ -54,15 +54,20 @@ pipeline {
     }
 
     success {
-        mail to: 'jnam658@gmail.com',
-             subject: "Jenkins Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-             body: "빌드 성공\n\n확인: ${env.BUILD_URL}"
+        emailext(
+            to: 'jnam658@g.hongik.ac.kr',
+            subject: "Jenkins Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: "빌드 성공\n\n확인: ${env.BUILD_URL}"
+        )
     }
 
     failure {
-        mail to: 'jnam658@gmail.com',
-             subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-             body: "빌드 실패\n\n확인: ${env.BUILD_URL}"
+        emailext(
+            to: 'jnam658@g.hongik.ac.kr',
+            subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: "빌드 실패\n\n확인: ${env.BUILD_URL}"
+        )
     }
+}
 }
 }
